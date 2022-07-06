@@ -5,8 +5,6 @@ import moment from "moment";
 function Footer() {
   const year = moment().format("YYYY");
 
-  console.log(year);
-
   return (
     <footer
       style={{
