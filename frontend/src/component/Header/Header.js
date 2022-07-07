@@ -14,7 +14,9 @@ function Header() {
     <Navbar bg="primary" expand="lg" variant="dark">
       <Container>
         <Navbar.Brand>
-          <Link to="/">Memo</Link>
+          <Link className="navbar-brand" to="/">
+            Memo
+          </Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -28,9 +30,9 @@ function Header() {
             </Form>
           </Nav>
           <Nav>
-            <Nav.Link>
-              <Link to="/mynotes">My Notes</Link>
-            </Nav.Link>
+            <Link className="nav-link" to="/mynotes">
+              My Notes
+            </Link>
             <NavDropdown title="osama bin laden" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">My Profile</NavDropdown.Item>
               <NavDropdown.Divider />
