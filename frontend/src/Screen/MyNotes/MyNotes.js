@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Accordion,
   Badge,
@@ -9,6 +9,7 @@ import {
 import { Link } from "react-router-dom";
 import MainScreen from "../../component/MainScreen";
 import notes from "../../data/notes";
+import axios from "axios";
 
 const MyNotes = () => {
   const deleteHandler = (id) => {
@@ -38,6 +39,17 @@ const MyNotes = () => {
       </span>
     );
   };
+
+  const fetchNotes = async () => {
+    const data = await axios.get("api/notes");
+    console.log(data);
+  };
+
+  useEffect(() => {
+    fetchNotes();
+    console.log("data");
+  }, []);
+
   return (
     <MainScreen title="Welcome back bro!!...">
       <Link to="/createnote">
