@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Accordion,
   Badge,
@@ -8,10 +8,11 @@ import {
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import MainScreen from "../../component/MainScreen";
-import notes from "../../data/notes";
 import axios from "axios";
 
 const MyNotes = () => {
+  const [notes, setNotes] = useState([]);
+
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure?")) {
       console.log(id);
@@ -41,13 +42,12 @@ const MyNotes = () => {
   };
 
   const fetchNotes = async () => {
-    const data = await axios.get("api/notes");
-    console.log(data);
+    const { data } = await axios.get("/api/notes");
+    setNotes(data);
   };
 
   useEffect(() => {
     fetchNotes();
-    console.log("data");
   }, []);
 
   return (
