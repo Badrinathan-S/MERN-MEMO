@@ -6,11 +6,18 @@ import {
   Card,
   useAccordionButton,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MainScreen from "../../component/MainScreen";
 import axios from "axios";
 
 const MyNotes = () => {
+  let navigate = useNavigate();
+  useEffect(() => {
+    const userInfo = localStorage.getItem("userInfo");
+    if (!userInfo) {
+      navigate("/");
+    }
+  }, [navigate]);
   const [notes, setNotes] = useState([]);
 
   const deleteHandler = (id) => {

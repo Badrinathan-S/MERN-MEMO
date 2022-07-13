@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ErrorMessage from "../../component/ErrorMessage";
 import Loading from "../../component/Loading";
 import MainScreen from "../../component/MainScreen";
@@ -12,6 +12,8 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const history = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -36,6 +38,7 @@ const LoginScreen = () => {
         config
       );
       localStorage.setItem("userInfo", JSON.stringify(data));
+      history("/mynotes");
       setLoading(false);
     } catch (errors) {
       setError(errors.response.data.message);

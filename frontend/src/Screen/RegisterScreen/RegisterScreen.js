@@ -1,18 +1,100 @@
 import React, { useState } from "react";
-import { Form } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
 import MainScreen from "../../component/MainScreen";
+import "./RegisterScreen.css";
+import { Link, useNavigate } from "react-router-dom";
+import ErrorMessage from "../../component/ErrorMessage";
+import axios from "axios";
+import Loading from "../../component/Loading";
 
 const RegisterScreen = () => {
+  const history = useNavigate();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [picMessage, setPicMessage] = useState(null);
   const [pic, setPic] = useState(
     "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
   );
+  const api_key = "778248231698155";
+  // const cloud_name = "draydgazh";
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+      setMessage("password do not match!!");
+    } else {
+      setMessage(null);
+      try {
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+        setLoading(true);
+        const { data } = await axios.post(
+          "/api/users/",
+          { name, email, pic, password },
+          config
+        );
+        localStorage.setItem("userInfo", JSON.stringify(data));
+        history("/mynotes");
+        setLoading(false);
+      } catch (errors) {
+        setError(errors.response.data.message);
+        console.log(errors);
+        setLoading(false);
+      }
+    }
+  };
+
+  const postDetails = async (pics) => {
+    console.log(pics);
+    if (!pics) {
+      return setPicMessage("Please Select an Image");
+    }
+    setMessage(null);
+
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("api_key", api_key);
+      data.append("upload_preset", "MEMO-MERN");
+      data.append("cloud_name", "draydgazh");
+      // eslint-disable-next-line
+      const cloudinaryResponse = await axios
+        .post(`https://api.cloudinary.com/v1_1/MEMO-MERN/auto/upload`, data, {
+          headers: { "Content-Type": "multipart/form-data" },
+          onUploadProgress: function (e) {
+            console.log(e.loaded / e.total);
+          },
+        })
+        .then(({ data }) => {
+          setPic(data.url.toString());
+          console.log(pic);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      return setPicMessage("please select an image");
+    }
+  };
+
   return (
     <MainScreen title="REGISTER">
       <div className="loginContainer">
-        <Form>
-          <Form.Group controlId="name">
+        {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
+        {message && <ErrorMessage variant="danger">{message}</ErrorMessage>}
+        {loading && <Loading />}
+        <Form onSubmit={submitHandler}>
+          <Form.Group className="form-group" controlId="name">
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="text"
@@ -22,38 +104,55 @@ const RegisterScreen = () => {
             />
           </Form.Group>
 
-          <Form.Group controlId="password">
+          <Form.Group className="form-group" controlId="email">
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              type="email"
+              value={email}
+              placeholder="Enter email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group className="form-group" controlId="password">
             <Form.Label>Password</Form.Label>
             <Form.Control
               type="password"
-              value={name}
+              value={password}
               placeholder="Enter password"
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </Form.Group>
 
-          <Form.Group controlId="confirmPassword">
+          <Form.Group className="form-group" controlId="confirmPassword">
             <Form.Label>Confirm password</Form.Label>
             <Form.Control
               type="password"
-              value={name}
+              value={confirmPassword}
               placeholder="Confirm password"
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            {picMessage && (
+              <ErrorMessage variant="danger">{picMessage}</ErrorMessage>
+            )}
+          </Form.Group>
+          <Form.Group className="form-group" controlId="formFile">
+            <Form.Label>Profile picture</Form.Label>
+            <Form.Control
+              type="file"
+              onChange={(e) => postDetails(e.target.files[0])}
             />
           </Form.Group>
 
-          <Form.Group>
-            <Form.Label>Profile Picture</Form.Label>
-            <Form.Control
-              // onChange={(e)=>postDetails(e.target.files[0])}
-              id="custom-file"
-              type="file"
-              label="Upload Profile Picture"
-              placeholder="Confirm Password"
-              custom="true"
-            />
-          </Form.Group>
+          <Button variant="primary" type="submit">
+            Register
+          </Button>
         </Form>
+        <Row className="py-3">
+          <Col>
+            Have an Account ? <Link to="/login">Login</Link>
+          </Col>
+        </Row>
       </div>
     </MainScreen>
   );
