@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import MainScreen from "../../component/MainScreen";
@@ -7,22 +7,30 @@ import { Link, useNavigate } from "react-router-dom";
 import ErrorMessage from "../../component/ErrorMessage";
 import axios from "axios";
 import Loading from "../../component/Loading";
+import { register } from "../../actions/userActions";
+import { useDispatch, useSelector } from "react-redux";
 
 const RegisterScreen = () => {
-  const history = useNavigate();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState("");
+  // const [loading, setLoading] = useState(false);
   const [picMessage, setPicMessage] = useState(null);
   const [pic, setPic] = useState(
     "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
   );
   const api_key = "778248231698155";
   // const cloud_name = "draydgazh";
+
+  const dispatch = useDispatch();
+
+  const userRegister = useSelector((state) => state.userRegister);
+
+  const { loading, error, userInfo } = userRegister;
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -31,31 +39,12 @@ const RegisterScreen = () => {
       setMessage("password do not match!!");
     } else {
       setMessage(null);
-      try {
-        const config = {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
-        setLoading(true);
-        const { data } = await axios.post(
-          "/api/users/",
-          { name, email, pic, password },
-          config
-        );
-        localStorage.setItem("userInfo", JSON.stringify(data));
-        history("/mynotes");
-        setLoading(false);
-      } catch (errors) {
-        setError(errors.response.data.message);
-        console.log(errors);
-        setLoading(false);
-      }
+      dispatch(register(email, password, name, pic));
     }
   };
 
   const postDetails = async (pics) => {
-    console.log(pics);
+    // console.log(pics);
     if (!pics) {
       return setPicMessage("Please Select an Image");
     }
@@ -72,12 +61,12 @@ const RegisterScreen = () => {
         .post(`https://api.cloudinary.com/v1_1/MEMO-MERN/auto/upload`, data, {
           headers: { "Content-Type": "multipart/form-data" },
           onUploadProgress: function (e) {
-            console.log(e.loaded / e.total);
+            // console.log(e.loaded / e.total);
           },
         })
         .then(({ data }) => {
           setPic(data.url.toString());
-          console.log(pic);
+          // console.log(pic);
         })
         .catch((err) => {
           console.log(err);
@@ -86,6 +75,12 @@ const RegisterScreen = () => {
       return setPicMessage("please select an image");
     }
   };
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/mynotes");
+    }
+  }, [userInfo, navigate]);
 
   return (
     <MainScreen title="REGISTER">
