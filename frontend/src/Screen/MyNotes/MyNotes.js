@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Accordion,
   Badge,
@@ -8,17 +8,23 @@ import {
 } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import MainScreen from "../../component/MainScreen";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { listNotes } from "../../actions/notesActions";
+import Loading from "../../component/Loading";
+import ErrorMessage from "../../component/ErrorMessage";
 
 const MyNotes = () => {
   let navigate = useNavigate();
-  useEffect(() => {
-    const userInfo = localStorage.getItem("userInfo");
-    if (!userInfo) {
-      navigate("/");
-    }
-  }, [navigate]);
-  const [notes, setNotes] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const noteList = useSelector((state) => state.notesList);
+
+  const { loading, notes, error } = noteList;
+
+  const userLogin = useSelector((state) => state.userLogin);
+
+  const { userInfo } = userLogin;
 
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure?")) {
@@ -48,23 +54,25 @@ const MyNotes = () => {
     );
   };
 
-  const fetchNotes = async () => {
-    const { data } = await axios.get("/api/notes");
-    setNotes(data);
-  };
-
   useEffect(() => {
-    fetchNotes();
-  }, []);
+    dispatch(listNotes());
+    if (!userInfo) {
+      navigate("/");
+    }
+  }, [dispatch, navigate]);
+
+  const note = notes ? notes : [];
 
   return (
-    <MainScreen title="Welcome back bro!!...">
+    <MainScreen title={`Welcome back ${userInfo ? userInfo.name : null}`}>
       <Link to="/createnote">
         <Button style={{ marginLeft: 10, marginBotton: 6 }} size="lg">
           createnote
         </Button>
       </Link>
-      {notes.map((note) => (
+      {loading && <Loading />}
+      {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
+      {note.map((note) => (
         <Accordion key={note._id}>
           <Card>
             <Card.Header style={{ display: "flex" }}>
@@ -88,7 +96,10 @@ const MyNotes = () => {
                 <blockquote className="blockquote mb-0">
                   <p>{note.content}</p>
                   <footer className="blockquote-footer">
-                    Created on - date
+                    Created on{" "}
+                    <cite title="Source Title">
+                      {note.createdAt.substring(0, 10)}
+                    </cite>
                   </footer>
                 </blockquote>
               </Card.Body>
