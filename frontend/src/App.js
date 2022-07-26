@@ -7,7 +7,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MyNotes from "./Screen/MyNotes/MyNotes";
 import LoginScreen from "./Screen/LoginScreen/LoginScreen";
 import RegisterScreen from "./Screen/RegisterScreen/RegisterScreen";
-import CreateNote from "./Screen/CreateNote/createNote";
+import CreateNote from "./Screen/CreateNote/CreateNote";
 
 const App = () => (
   <BrowserRouter>
