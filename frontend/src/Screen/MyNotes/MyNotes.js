@@ -26,6 +26,10 @@ const MyNotes = () => {
 
   const { userInfo } = userLogin;
 
+  const noteCreate = useSelector((state) => state.notesCreate);
+
+  const { success: successCreate } = noteCreate;
+
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure?")) {
       console.log(id);
@@ -59,7 +63,7 @@ const MyNotes = () => {
     if (!userInfo) {
       navigate("/");
     }
-  }, [dispatch, navigate]);
+  }, [dispatch, navigate, successCreate, userInfo]);
 
   const note = notes ? notes : [];
 
