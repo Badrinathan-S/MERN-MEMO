@@ -4,6 +4,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { userLoginReducer, userRegisterReducer } from "./reducers/userReducers";
 import {
   noteCreateReducer,
+  noteDeleteReducer,
   noteListReducer,
   noteUpdateReducer,
 } from "./reducers/notesReducer";
@@ -14,6 +15,7 @@ const reducer = combineReducers({
   notesList: noteListReducer,
   notesCreate: noteCreateReducer,
   notesUpdate: noteUpdateReducer,
+  notesDelete: noteDeleteReducer,
   //will
 });
 

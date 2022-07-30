@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../actions/userActions";
 
-function Header() {
+function Header({ setSearch }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
@@ -38,6 +38,7 @@ function Header() {
                 type="text"
                 placeholder="Search"
                 className="mr-sm-2"
+                onChange={(e) => setSearch(e.target.value)}
               />
             </Form>
           </Nav>
@@ -45,7 +46,7 @@ function Header() {
             <Link className="nav-link" to="/mynotes">
               My Notes
             </Link>
-            <NavDropdown title="osama bin laden" id="basic-nav-dropdown">
+            <NavDropdown title={userInfo?.name} id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">My Profile</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item onClick={logoutHandler}>

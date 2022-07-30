@@ -18,10 +18,7 @@ const CreateNote = () => {
   const navigate = useNavigate();
 
   const noteCreate = useSelector((state) => state.notesCreate);
-  const { loading, error, note } = noteCreate;
-
-  console.log(note);
-  console.log(title, content, category);
+  const { loading, error } = noteCreate;
 
   const resetHandler = () => {
     setTitle("");

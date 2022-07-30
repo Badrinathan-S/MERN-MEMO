@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Footer from "./component/Footer/Footer";
 import Header from "./component/Header/Header";
@@ -8,20 +8,25 @@ import MyNotes from "./Screen/MyNotes/MyNotes";
 import LoginScreen from "./Screen/LoginScreen/LoginScreen";
 import RegisterScreen from "./Screen/RegisterScreen/RegisterScreen";
 import CreateNote from "./Screen/CreateNote/CreateNote";
+import SinglePage from "./Screen/CreateNote/SinglePage";
 
-const App = () => (
-  <BrowserRouter>
-    <Header />
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/login" element={<LoginScreen />} />
-      <Route path="/register" element={<RegisterScreen />} />
-      <Route path="/createnote" element={<CreateNote />} />
-      <Route path="/note/:id" element={<CreateNote />} />
-      <Route path="/mynotes" element={<MyNotes />} />
-    </Routes>
-    <Footer />
-  </BrowserRouter>
-);
+const App = () => {
+  const [search, setSearch] = useState("");
+
+  return (
+    <BrowserRouter>
+      <Header setSearch={setSearch} />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginScreen />} />
+        <Route path="/register" element={<RegisterScreen />} />
+        <Route path="/createnote" element={<CreateNote />} />
+        <Route path="/note/:id" element={<SinglePage />} />
+        <Route path="/mynotes" element={<MyNotes search={search} />} />
+      </Routes>
+      <Footer />
+    </BrowserRouter>
+  );
+};
 
 export default App;
