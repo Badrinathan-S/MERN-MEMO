@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "memo app",
   "main": "server.js",
+  "engines": {
+    "node": "16.15.0"
+  },
   "scripts": {
     "start": "nodemon backend/server.js",
     "client": "npm start --prefix frontend",
