@@ -100,7 +100,7 @@ const RegisterScreen = () => {
           </Form.Group>
 
           <Form.Group className="form-group" controlId="email">
-            <Form.Label>Name</Form.Label>
+            <Form.Label>Email</Form.Label>
             <Form.Control
               type="email"
               value={email}

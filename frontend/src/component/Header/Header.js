@@ -20,39 +20,53 @@ function Header({ setSearch }) {
 
   const logoutHandler = () => {
     dispatch(logout());
-    navigate("/");
+    navigate("/home");
   };
   return (
     <Navbar bg="primary" expand="lg" variant="dark">
       <Container>
         <Navbar.Brand>
-          <Link className="navbar-brand" to="/">
+          <Link className="navbar-brand" to="/home">
             Memo
           </Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="m-auto">
-            <Form>
-              <FormControl
-                type="text"
-                placeholder="Search"
-                className="mr-sm-2"
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </Form>
+            {userInfo && (
+              <Form>
+                <FormControl
+                  type="text"
+                  placeholder="Search"
+                  className="mr-sm-2"
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </Form>
+            )}
           </Nav>
           <Nav>
-            <Link className="nav-link" to="/mynotes">
-              My Notes
-            </Link>
-            <NavDropdown title={userInfo?.name} id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">My Profile</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item onClick={logoutHandler}>
-                Logout
-              </NavDropdown.Item>
-            </NavDropdown>
+            {userInfo ? (
+              <>
+                <Link className="nav-link" to="/mynotes">
+                  My Notes
+                </Link>
+                <NavDropdown title={userInfo?.name} id="basic-nav-dropdown">
+                  <NavDropdown.Item href="#action/3.1">
+                    My Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={logoutHandler}>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </>
+            ) : (
+              <>
+                <Link className="nav-link" to="/login">
+                  Login
+                </Link>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

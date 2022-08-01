@@ -17,7 +17,7 @@ const App = () => {
     <BrowserRouter>
       <Header setSearch={setSearch} />
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/home" element={<LandingPage />} />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/register" element={<RegisterScreen />} />
         <Route path="/createnote" element={<CreateNote />} />

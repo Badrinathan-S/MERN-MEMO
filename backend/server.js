@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("api running");
+  res.redirect("/home");
 });
 
 app.get("/api/notes", (req, res) => {
