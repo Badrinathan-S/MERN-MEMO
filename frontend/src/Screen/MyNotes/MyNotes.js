@@ -89,7 +89,7 @@ const MyNotes = ({ search }) => {
   return (
     <MainScreen title={`Welcome back ${userInfo ? userInfo.name : null}`}>
       <Link to="/createnote">
-        <Button style={{ marginLeft: 10, marginBotton: 6 }} size="lg">
+        <Button style={{ marginLeft: 10, marginBottom: 10 }} size="lg">
           createnote
         </Button>
       </Link>
