@@ -83,12 +83,14 @@ const CreateNote = () => {
               />
             </Form.Group>
             {loading && <Loading size={50} />}
-            <Button type="submit" variant="primary">
-              Create Note
-            </Button>
-            <Button className="mx-2" onClick={resetHandler} variant="danger">
-              Reset Feilds
-            </Button>
+            <div style={{ marginTop: 15 }}>
+              <Button type="submit" variant="primary">
+                Create Note
+              </Button>
+              <Button className="mx-2" onClick={resetHandler} variant="danger">
+                Reset Feilds
+              </Button>
+            </div>
           </Form>
         </Card.Body>
 
