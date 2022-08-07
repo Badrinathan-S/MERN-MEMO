@@ -105,7 +105,10 @@ const MyNotes = ({ search }) => {
           filteredNote.title.toLowerCase().includes(search.toLowerCase())
         )
         .map((note) => (
-          <Accordion key={note._id}>
+          <Accordion
+            style={{ marginTop: "10px", marginBottom: "10px" }}
+            key={note._id}
+          >
             <Card>
               <Card.Header style={{ display: "flex" }}>
                 <CustomToggle eventKey="0" content={note.title}></CustomToggle>
