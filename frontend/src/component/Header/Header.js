@@ -51,9 +51,15 @@ function Header({ setSearch }) {
                   My Notes
                 </Link>
                 <NavDropdown title={userInfo?.name} id="basic-nav-dropdown">
-                  <NavDropdown.Item href="#action/3.1">
+                  <Link
+                    data-rr-ui-dropdown-item
+                    className="dropdown-item"
+                    to="Profile"
+                    role="button"
+                    tabIndex="0"
+                  >
                     My Profile
-                  </NavDropdown.Item>
+                  </Link>
                   <NavDropdown.Divider />
                   <NavDropdown.Item onClick={logoutHandler}>
                     Logout
