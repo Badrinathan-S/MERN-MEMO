@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import MainScreen from "../component/MainScreen";
+import ErrorMessage from "../component/ErrorMessage";
 
 const ProfilePage = () => {
   const [name, setName] = useState("");
@@ -64,7 +65,11 @@ const ProfilePage = () => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 ></Form.Control>
-              </Form.Group>
+              </Form.Group>{" "}
+              {picMessage && (
+                <ErrorMessage varient="danger">{picMessage}</ErrorMessage>
+              )}
+              <Form.Group controlId="pic"></Form.Group>
             </Form>
           </Col>
           <Col
