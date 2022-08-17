@@ -78,7 +78,7 @@ export const updateProfile = (user) => async (dispatch, getState) => {
 
     const {
       userLogin: { userInfo },
-    } = getState;
+    } = getState();
 
     const config = {
       headers: {

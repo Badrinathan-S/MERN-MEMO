@@ -1,8 +1,12 @@
-import React, { useState } from "react";
-import { Col, Form, Row } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import MainScreen from "../component/MainScreen";
 import ErrorMessage from "../component/ErrorMessage";
+import { useNavigate } from "react-router-dom";
+import Loading from "../component/Loading";
+import { updateProfile } from "../actions/userActions";
+import axios from "axios";
 
 const ProfilePage = () => {
   const [name, setName] = useState("");
@@ -11,6 +15,11 @@ const ProfilePage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [picMessage, setPicMessage] = useState();
+  const [message, setMessage] = useState();
+
+  const api_key = "778248231698155";
+
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -22,7 +31,59 @@ const ProfilePage = () => {
 
   const { loading, error, success } = userUpdate;
 
-  const submitHandler = () => {};
+  const submitHandler = (e) => {
+    e.preventDefault();
+
+    if(password === confirmPassword){
+      dispatch(updateProfile({name, email, password, pic}));
+    }
+  };
+
+  const postDetails = async (pics) => {
+    // console.log(pics);
+    if (!pics) {
+      return setPicMessage("Please Select an Image");
+    }
+    setMessage(null);
+
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("api_key", api_key);
+      data.append("upload_preset", "MEMO-MERN");
+      data.append("cloud_name", "draydgazh");
+      // eslint-disable-next-line
+      const cloudinaryResponse = await axios
+        .post(`https://api.cloudinary.com/v1_1/MEMO-MERN/auto/upload`, data, {
+          headers: { "Content-Type": "multipart/form-data" },
+          onUploadProgress: function (e) {
+            // console.log(e.loaded / e.total);
+          },
+        })
+        .then(({ data }) => {
+          setPic(data.url.toString());
+          // console.log(pic);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      return setPicMessage("please select an image");
+    }
+  };
+
+
+  useEffect(() => {
+    if(!userInfo){
+      navigate("/home");
+    }else{
+
+      setName(userInfo.name);
+      setEmail(userInfo.email);
+      setPic(userInfo.pic);
+
+    }
+  }, [navigate, userInfo])
 
   return (
     <MainScreen title="EDIT PROFILE">
@@ -30,6 +91,13 @@ const ProfilePage = () => {
         <Row className="profileContainer">
           <Col md={6}>
             <Form onSubmit={submitHandler}>
+              {loading && <Loading/>}
+              {success && (
+                <ErrorMessage variant="success">
+                  Updated success
+                </ErrorMessage>
+              )}
+              {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
               <Form.Group controlId="name">
                 <Form.Label>Name</Form.Label>
                 <Form.Control
@@ -69,7 +137,14 @@ const ProfilePage = () => {
               {picMessage && (
                 <ErrorMessage varient="danger">{picMessage}</ErrorMessage>
               )}
-              <Form.Group controlId="pic"></Form.Group>
+              <Form.Group controlId="pic">
+              <Form.Label>Change Profile picture</Form.Label>
+              <Form.Control
+                 type="file"
+                 onChange={(e) => postDetails(e.target.files[0])}
+                />
+              </Form.Group>
+              <Button type="submit" varient="primary">Update</Button>
             </Form>
           </Col>
           <Col
@@ -79,7 +154,7 @@ const ProfilePage = () => {
               justifyContent: "center",
             }}
           >
-            Profilepic
+            <img src={pic} alt={name} className="profilePic" />
           </Col>
         </Row>
       </div>
