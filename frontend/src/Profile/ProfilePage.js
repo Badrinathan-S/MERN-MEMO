@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../component/Loading";
 import { updateProfile } from "../actions/userActions";
 import axios from "axios";
+import Container from 'react-bootstrap/Container';
+import "./ProfilePage.css"
 
 const ProfilePage = () => {
   const [name, setName] = useState("");
@@ -87,7 +89,7 @@ const ProfilePage = () => {
 
   return (
     <MainScreen title="EDIT PROFILE">
-      <div>
+      <Container>
         <Row className="profileContainer">
           <Col md={6}>
             <Form onSubmit={submitHandler}>
@@ -147,17 +149,11 @@ const ProfilePage = () => {
               <Button type="submit" varient="primary">Update</Button>
             </Form>
           </Col>
-          <Col
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <Col md={4}>
             <img src={pic} alt={name} className="profilePic" />
           </Col>
         </Row>
-      </div>
+      </Container>
     </MainScreen>
   );
 };
