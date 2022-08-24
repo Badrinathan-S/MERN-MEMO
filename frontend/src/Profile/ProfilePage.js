@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Image, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import MainScreen from "../component/MainScreen";
 import ErrorMessage from "../component/ErrorMessage";
@@ -149,8 +149,8 @@ const ProfilePage = () => {
               <Button type="submit" varient="primary">Update</Button>
             </Form>
           </Col>
-          <Col md={4}>
-            <img src={pic} alt={name} className="profilePic" />
+          <Col md={6} className="profilePicture">
+            <Image src={pic} alt={name} className="profilePic" fluid={true} rounded={true}/>
           </Col>
         </Row>
       </Container>
