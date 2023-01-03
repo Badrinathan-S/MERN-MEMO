@@ -66,11 +66,12 @@ function Header({ setSearch }) {
                   </NavDropdown.Item>
                 </NavDropdown>
               </>
-            ) : (
+            ) : ( 
               <>
                 <Link className="nav-link" to="/login">
                   Login
                 </Link>
+                <Link className="nav-link" to="/register">Register</Link>
               </>
             )}
           </Nav>
